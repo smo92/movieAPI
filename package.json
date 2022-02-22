@@ -1,0 +1,21 @@
+{
+  "name": "movieapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Script1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smo92/movieAPI.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smo92/movieAPI/issues"
+  },
+  "homepage": "https://github.com/smo92/movieAPI#readme"
+}
