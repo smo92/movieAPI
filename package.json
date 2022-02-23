@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/smo92/movieAPI/issues"
   },
-  "homepage": "https://github.com/smo92/movieAPI#readme"
+  "homepage": "https://github.com/smo92/movieAPI#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
