@@ -19,6 +19,11 @@
   },
   "homepage": "https://github.com/smo92/movieAPI#readme",
   "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
     "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0"
   }
 }
