@@ -9,7 +9,17 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('common'));
 
-let users = [];
+let users =  [
+  {
+    username: 'Pat',
+    email: 'jordans@gmail.com',
+    password: 'football',
+    birthday: '12/09/1994',
+    favorites: [
+      'Gladiator'
+    ]
+  }
+];
 
 let movies = [
   {
@@ -60,20 +70,25 @@ app.get('/movies/:title',(req,res) =>{
 
 //Respond with all movies in specified genre
 app.get('/movies/genres/:genre', (req, res) => {
-  const genre = movies.find((movie) => movie.genres.type === req.params.genre).genre;
+  const movieGenre = movies.find((movie) =>{return movie.genre.type === req.params.genre});
 
-  if(genre) {
-    res.status(200).json(genre);
+  let type_Des = movieGenre.genre;
+  
+  if(movieGenre){
+    res.status(200).json(type_Des);
   }else{
     res.status(404).send('Genre not found!');
   }
-});
+  });
+
 
 //Responds with json data about specified director
-app.get('movies/director/:name', (req,res) => {
-  const director = movies.find((movie) => {return movie.director.name === req.params.name});
+app.get('/movies/director/:name', (req,res) => {
+  const movieDirectors = movies.find((movie) => {return movie.director.name === req.params.name});
 
-  if(director){
+  let director = movieDirectors.director
+
+  if(movieDirectors){
     res.status(200).json(director);
   }else{
     res.status(404).send('Director not found!');
@@ -95,7 +110,8 @@ app.post('/users',(req,res) => {
 });
 
 //Update existing username
-app.put('users/:username',(req,res) =>{
+app.put('/users/:username',(req,res) =>{
+  const newUsername = req.body;
   let user = users.find((user) => {return user.username === req.params.username});
 
   if(user) {
@@ -107,8 +123,8 @@ app.put('users/:username',(req,res) =>{
 });
 
 //Add movie to users favorites
-app.post('users/:username/:movie', (req,res) =>{
-  let user = users.find((user) => {return user.usersname = req.params.username});
+app.post('/users/:username/:movie', (req,res) =>{
+  let user = users.find((user) => {return user.username === req.params.username});
 
   if (user){
     user.favorites.push(req.params.movie);
@@ -127,6 +143,18 @@ app.delete('/users/:username/:movie',(req,res) =>{
      res.status(200).send(req.params.movie + ' was removed from your favorites list!');
   }else{
     res.status(404).send('User was not found');
+  }
+});
+
+//delete user
+app.delete('/users/:username', (req,res) => {
+  let user = users.find((user) => { return user.username === req.params.username });
+
+  if (user) {
+    users = users.filter((user) => { return user.username !== req.params.username });
+    res.status(201).send(req.params.username + ' was deleted.');
+  } else {
+    res.status(404).send('User not found.')
   }
 });
 
