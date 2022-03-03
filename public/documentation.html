@@ -12,11 +12,87 @@
     <h1>FlixFans</h1>
     <br />
     <br />
+
     <p>
         "The web application will provide users with access to information about different
         movies, directors, and genres. Users will be able to sign up, update their
-        personal information, and create a list of their favorite movies."
+        personal information, and create a list of their favorite movies.
+        <br />
+        <br />
     </p>
+    <br/>
+    <br/>
+
+    <h2> URL Endpoints</h2>
+    <br/>
+    <br/>
+
+    <ol>
+        <li>
+            GET
+            Get list of all movies(json format)
+            http://localhost:8080/movies
+            This endpoint retrieves a json of all movies
+        </li>
+        
+        <li>
+            GET
+            Get data about a single movie by name.
+            http://localhost:8080/movies/:title
+            Endpoint retrieves all data on a specific movie by title.
+            Description, genre, director, image url, and weather or not it is featured.
+        </li>
+        
+        <li>
+            GET
+            Get data on a director by name
+            http://localhost:8080/movies/director/:name
+            Endpoint retrieves all data on Director that was specified.
+            Including: Bio, birth year, death year.
+        </li>
+        
+        <li>
+            GET
+            Get info on genre based of type by name
+            http://localhost:8080/movies/genres/:genre
+            Make things easier for your teammates with a complete request description.
+        </li>
+        
+        <li>
+            POST
+            Post to register new user using data in request body
+            http://localhost:8080/users
+            Endpoint to add a new user
+        </li>
+        
+        <li>
+            PUT
+            Put to update user info by name using data in req.body
+            http://localhost:8080/users/:username
+            Endpoint to update users info such as username
+        </li>
+        
+        <lil>
+            POST
+            Add movies to favorites for user
+            http://localhost:8080/users/:username/:movie
+            Allow users to add a movie to their list of favorites
+        </lil>
+        
+        <lil>
+            DEL
+            Remove movie from favorites list
+            http://localhost:8080/users/:username/:movie
+            Allow users to remove a movie from their list of favorites
+        </lil>
+       
+        <li> 
+            DEL
+            Remove user
+            http://localhost:8080/users/:username
+            Allow existing users to deregister
+        </li>
+    </ol>
 
 </body>
 </html>
