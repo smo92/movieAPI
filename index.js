@@ -10,10 +10,10 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-const port = 27017;
+const port = 8080;
 
 
-mongoose.connect('mongodb://localhost:27017/FlixFansDB',
+mongoose.connect('mongodb://127.0.0.1:27017/FlixFansDB',
   {useNewUrlParser: true, useUnifiedTopology: true});
 
 const app = express();
@@ -31,9 +31,17 @@ app.get('/',(req,res) =>{
 
 //responds with list of all movies
 app.get('/movies',(req,res)=>{
-Movies.find({});
+  Movies.find()
+  .then((movies) => {
+    res.status(200).json(movies);
+  })
+  .catch((err) => {
+    res.status(500).send('Error: '+ err);
+  });
+
 });
-/*
+
+
 //Responds with a specific movie by title
 app.get('/movies/:Title',(req,res) =>{
   Movies.findOne({Title: req.params.Title})
@@ -46,8 +54,9 @@ app.get('/movies/:Title',(req,res) =>{
   });
 });
 
+
 //Respond with all movies in specified genre
-app.get('/movies/genres/:genre', (req, res) => {
+app.get('/movies/genres/:Name', (req, res) => {
   Movies.find({'Genre.Name': req.params.Name})
     .then((movies) => {
       res.status(200).json(movies);
@@ -60,21 +69,26 @@ app.get('/movies/genres/:genre', (req, res) => {
 
 
 //Responds with json data about specified director
-app.get('/director/:name', (req,res) => {
+app.get('/movies/director/:Name', (req,res) => {
  Movies.findOne({'Director.Name': req.params.Name})
   .then((movie)=>{
     if(movie){
-      return res.status(200).json(movie.director);
+      res.status(200).json(movie.Director);
     }else{
     res.status(404).send('Director not found!');
-  }
+  };
+})
+.catch((err)=>{
+  console.error(err);
+  res.status(500).send('Error' + err);
+  });
 });
 
 //Create a new user using UUID
-app.post('/Users',(req,res) => {
-  Users.findOne({Username: req.params.Username})
+app.post('/users',(req,res) => {
+  Users.findOne({Username: req.body.Username})
     .then((user) =>{
-      if(user){return res.status(400).send(req.body.username + 'already exists!');
+      if(user){return res.status(400).send(req.body.Username + 'already exists!');
     }else{
       Users.create({
         Username:req.body.Username,
@@ -86,7 +100,7 @@ app.post('/Users',(req,res) => {
       .catch((error) => {
         console.error(error);
         res.status(400).send('Error' + err);
-      });
+      })
     }
   })
   .catch((error)=>{
@@ -96,29 +110,28 @@ app.post('/Users',(req,res) => {
 });
 
 //Update existing username
-app.put('/users/:Username',(req,res) =>{
-  Users.findOneAndUpdate({Username: req.params.Username},
-    {$set:{
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email:req.body.Email,
-      Birthday: req.body.Birthday
+app.put('/users/:username',(req,res) =>{
+  Users.findOneAndUpdate({ username: req.params.username },
+    { $set: {
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email,
+        birthday: req.body.birthday
     }
-  },
-  //makes sure updated document is returned
-  {new:true},
-  (err, updatedUser) =>{
-    if(err){
-      console.error(err);
-      res.status(500).send('Error:' + err);
-    }else{
-      res.json(updatedUser);
+}, 
+{ new: true }, // this makes sure that the updated document is returned
+(err, updatedUser) => {
+    if(err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    } else {
+        res.json(updatedUser);
     }
-  }); 
+  });
 });
 
 //Add movie to users favorites
-app.post('/users/:Username/movies/:MovieID', (req,res) =>{
+app.post('/users/:username/movies/:MovieID', (req,res) =>{
   Users.findOneAndUpdate({Username:req.params.Username},
     {$push:{ FavoriteMovies: req.params.MovieID}
   },
@@ -133,7 +146,7 @@ app.post('/users/:Username/movies/:MovieID', (req,res) =>{
     }
   });
 });
-
+/*
 //Remove movie from users favorites
 app.delete('/users/:Username/movies/:MovieID',(req,res) =>{
   Users.findOneAndUpdate({Username:req.params.Username},
@@ -165,7 +178,6 @@ app.delete('/users/:Username', (req,res) => {
       res.status(500).send('Error' + err);
     });
 });
-
 */
 
 //using express to search public folder for any "/" extension that doesnt have an endpoint specified
