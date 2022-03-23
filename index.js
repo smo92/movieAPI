@@ -86,15 +86,15 @@ app.get('/movies/director/:Name', (req,res) => {
 
 //Create a new user using UUID
 app.post('/users',(req,res) => {
-  Users.findOne({Username: req.body.Username})
+  Users.findOne({username: req.body.username})
     .then((user) =>{
-      if(user){return res.status(400).send(req.body.Username + 'already exists!');
+      if(user){return res.status(400).send(req.body.username + 'already exists!');
     }else{
       Users.create({
-        Username:req.body.Username,
-        Password: req.body.Password,
-        Email:req.body.Email,
-        Birthday: req.body.Birthday
+        username:req.body.username,
+        password: req.body.password,
+        email:req.body.email,
+        birthday: req.body.birthday
       })
       .then((user)=>{res.status(200).json(user)})
       .catch((error) => {
@@ -132,7 +132,7 @@ app.put('/users/:username',(req,res) =>{
 
 //Add movie to users favorites
 app.post('/users/:username/movies/:MovieID', (req,res) =>{
-  Users.findOneAndUpdate({Username:req.params.Username},
+  Users.findOneAndUpdate({username:req.params.username},
     {$push:{ FavoriteMovies: req.params.MovieID}
   },
   //make sure updated doc is sent
@@ -146,11 +146,11 @@ app.post('/users/:username/movies/:MovieID', (req,res) =>{
     }
   });
 });
-/*
+
 //Remove movie from users favorites
-app.delete('/users/:Username/movies/:MovieID',(req,res) =>{
-  Users.findOneAndUpdate({Username:req.params.Username},
-    {$pull:{FavoriteMovies:req.params.MovieID}
+app.delete('/users/:username/movies/:MovieID',(req,res) =>{
+  Users.findOneAndUpdate({username:req.params.username},
+    {$pull:{favoriteMovies:req.params.MovieID}
     },
   {new:true},
   (err,updatedUser)=>{
@@ -164,13 +164,13 @@ app.delete('/users/:Username/movies/:MovieID',(req,res) =>{
 });
 
 //delete user
-app.delete('/users/:Username', (req,res) => {
-  Users.findOneAndRemove({Username: req.params.Username})
+app.delete('/users/:username', (req,res) => {
+  Users.findOneAndRemove({username: req.params.username})
     .then((user)=>{
       if (!user){
-        res.status(400).send(req.params.Username + ' was not found!');
+        res.status(400).send(req.params.username + ' was not found!');
       }else{
-        res.status(200).send(req.params.Username + ' was deleted!');
+        res.status(200).send(req.params.username + ' was deleted!');
       }
     })
     .catch((err)=>{
@@ -178,7 +178,7 @@ app.delete('/users/:Username', (req,res) => {
       res.status(500).send('Error' + err);
     });
 });
-*/
+
 
 //using express to search public folder for any "/" extension that doesnt have an endpoint specified
 app.use(express.static('public'));
