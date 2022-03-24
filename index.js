@@ -22,6 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 
+let auth = require('./auth')(app);
+
 //Responds by taking you to index
 app.get('/',(req,res) =>{
   res.send('Welcome to FlixFans!!');
