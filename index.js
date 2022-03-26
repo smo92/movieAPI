@@ -23,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
 
 let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
 
 //Responds by taking you to index
 app.get('/',(req,res) =>{
@@ -32,7 +34,7 @@ app.get('/',(req,res) =>{
 
 
 //responds with list of all movies
-app.get('/movies',(req,res)=>{
+app.get('/movies', passport.authenticate('jwt',{session:false}), (req,res)=>{
   Movies.find()
   .then((movies) => {
     res.status(200).json(movies);
