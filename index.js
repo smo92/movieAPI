@@ -2,7 +2,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
-const uuid = require('uuid');
 
 const mongoose = require('mongoose');
 mongoose.Promise = Promise;
