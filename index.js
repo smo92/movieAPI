@@ -10,8 +10,6 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-const port = 8080;
-
 
 mongoose.connect('mongodb://127.0.0.1:27017/FlixFansDB',
   {useNewUrlParser: true, useUnifiedTopology: true});
@@ -21,6 +19,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('common'));
+
+const {check, validationResult} = require('express-validator');
+
+const cors = require('cors');
+app.use(cors());
 
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -89,29 +92,39 @@ app.get('/movies/director/:Name', passport.authenticate('jwt',{session:false}), 
 });
 
 //Create a new user using UUID
-app.post('/users',(req,res) => {
-  Users.findOne({Username: req.body.Username})
-    .then((user) =>{
-      console.log("IN POST OF USER" + req.body.Username);
-     if(user){return res.status(400).send(user + 'already exists!');
-    }else{
-      Users.create({
-        Username:req.body.Username,
-        Password: req.body.Password,
-        Email:req.body.Email,
-        Birthday: req.body.Birthday
-      })
-  .then((user)=>{res.status(200).json(user)})
-    .catch((error) => {
+app.post('/users',
+  [
+    check('Username','Username is required').isLength({min:5}),
+    check('Username', 'Username contains characters that are not allowed') .isAlphanumeric(),
+    check('Username','Password is required') .not().isEmpty(),
+    check ('Email','Email does not appear valid') .isEmail()
+  ],(req,res) => {
+    let errors = validationResult(req);
+      if(!errors.isEmpty()){
+        return res.status(422).json({errors:errors.array()});
+      }
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({Username: req.body.Username})
+      .then((user) =>{
+      if(user){return res.status(400).send(user + 'already exists!');
+      }else{
+        Users.create({
+          Username:req.body.Username,
+          Password: hashedPassword,
+          Email:req.body.Email,
+          Birthday: req.body.Birthday
+        })
+    .then((user)=>{res.status(200).json(user)})
+      .catch((error) => {
+        console.error(error);
+        res.status(400).send('Error' + err);
+        })
+      }
+    })
+    .catch((error)=>{
       console.error(error);
-      res.status(400).send('Error' + err);
-      })
-    }
-  })
-  .catch((error)=>{
-    console.error(error);
-    res.status(500).send('Error' + err);
-    });
+      res.status(500).send('Error' + err);
+      });
   });
 
 //Update existing username
@@ -195,6 +208,7 @@ app.use((err,req,res,next) => {
 });
 //telling which port to listen to for requests
 
-app.listen(port,() => {
-  console.log("app running on Port: " + port);
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
