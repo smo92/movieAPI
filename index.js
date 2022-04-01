@@ -164,6 +164,14 @@ app.post('/users/:Username/movies/:MovieID',  passport.authenticate('jwt',{sessi
   });
 });
 
+//get list of users favorite movie
+app.get('/users/:Username/movies', passport.authenticate('jwt',{session:false}), (req,res) =>{
+  Users.findOne({Username:req.params.Username})
+  .populate('favoriteMovies')
+    .then(user => res.status(200).send(user.favoriteMovies))
+  .catch(error => res.status(500).send('Error ' + error))
+});
+
 //Remove movie from users favorites
 app.delete('/users/:Username/movies/:MovieID',  passport.authenticate('jwt',{session:false}),(req,res) =>{
   Users.findOneAndUpdate({Username:req.params.Username},
