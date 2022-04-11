@@ -1,0 +1,6 @@
+{"_id":{"$oid":"62436e26c7caa6f020770c12"},"Username":"Tyler","Password":"1234","Email":"email@email.com","Birthday":0.0002196285140562249,"favoriteMovies":[]}
+{"_id":{"$oid":"62436e4ec7caa6f020770c13"},"Username":"Pat","Password":"1234","Email":"pat@gmail.com","Birthday":1.0,"favoriteMovies":[{"$oid":"62229d7d5986be65e9a99fa7"},{"$oid":"6226823b25f06bcfa77b8cc3"},{"$oid":"62278d4f969d274a24d68fe4"}]}
+{"_id":{"$oid":"62436e6ec7caa6f020770c14"},"Username":"Kyle","Password":"1234","Email":"kyle@gmail.com","Birthday":1.0,"favoriteMovies":[]}
+{"_id":{"$oid":"62436f6a2e4770a62a9b055d"},"Username":"EaglesFan","Password":"shadow1","Email":"email@email.com","Birthday":{"$date":"1992-04-20T00:00:00Z"},"favoriteMovies":[],"__v":0}
+{"_id":{"$oid":"624371b92e4770a62a9b0561"},"Username":"6ersFan","Password":"shadow1","Email":"email@email.com","Birthday":{"$date":"1992-04-20T00:00:00Z"},"favoriteMovies":[],"__v":0}
+{"_id":{"$oid":"624371c32e4770a62a9b0564"},"Username":"SteveMO","Password":"shadow1","Email":"email@email.com","Birthday":{"$date":"1992-04-20T00:00:00Z"},"favoriteMovies":[],"__v":0}
